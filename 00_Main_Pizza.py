@@ -339,7 +339,12 @@ else:
 
 
 name = not_blank("Please enter your name: ")
-phonenum = num_check("Please enter your phone number (no spaces): +64 ")
+while True:
+    phonenum = num_check("Please enter your phone number (no spaces): +64 ")
+    if phonenum > 9999999999 or phonenum < 999999999:
+        print("Please enter a valid Phone number")
+    else:
+        break
 
 print("Total: ${}".format(cost))
 
@@ -359,10 +364,11 @@ if cashorcred == "credit":
 print()
 print("***********************************************************")
 print()
+print(bcolors.BOLD + "Details:" + bcolors.ENDC)
 print("Name: {}".format(name))
 print("Phone Number: +64 {}".format(phonenum))
 print()
-print("Pizzas:")
+print(bcolors.BOLD + "Pizzas:" + bcolors.ENDC)
 # Iterate through the selected pizza types and print them with their corresponding index
 for index, pizza_type in enumerate(pizza_types_name, start=1):
     print("{}. {}".format(index, pizza_type))
@@ -376,9 +382,13 @@ print(cashorcred)
 if cashorcred == "credit":
     print("Card Number {}".format(censoredcard))
 print("${}".format(cost))
-
-
-number = num_check("asdad")
+print()
+confirm = string_checker("Confirm? ", 1, yes_no_list)
+if confirm == "no":
+    confirmation = string_checker("Are you Sure you wish to Delete Your order? ", 1, yes_no_list)
+    if confirmation == "yes":
+        print(bcolors.FAIL + "Order Was Deleted")
+        exit()
 
 print('''
 mini_movie_frame = pandas.DataFrame(mini_movie_dict)
