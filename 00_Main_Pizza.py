@@ -327,6 +327,7 @@ delivery_method = string_checker("Choose a delivery method Pickup / "
                             1, delivery_list)
 
 if delivery_method == "delivery":
+    cashorcred = "credit"
     cost = cost + 10
     addressstreet = not_blank("Enter Street Name: ")
     addressnum = num_check("Enter Street Number: ")
@@ -351,24 +352,40 @@ while cardnum == 0:
     else:
         break
 
+if cashorcred == "credit":
+    strnumber = int(str(cardnum)[0])
+    strnumber2 = int(str(cardnum)[1])
+    censoredcard = "{}{}**".format(strnumber, strnumber2)
+print()
+print("***********************************************************")
+print()
+print("Name: {}".format(name))
+print("Phone Number: +64 {}".format(phonenum))
+print()
+print("Pizzas:")
+# Iterate through the selected pizza types and print them with their corresponding index
+for index, pizza_type in enumerate(pizza_types_name, start=1):
+    print("{}. {}".format(index, pizza_type))
+print()
+if delivery_method == "delivery":
+    print("Deliver to {} {}".format(addressnum, addressstreet))
+else:
+    print("Pickup In store")
+print()
+print(cashorcred)
+if cashorcred == "credit":
+    print("Card Number {}".format(censoredcard))
+print("${}".format(cost))
 
-    # calculate ticket cost
-    # ticket_cost = calc_ticket_price(age)
 
-    # get payment method
+number = num_check("asdad")
 
 print('''
-
-    # add ticket name, cost and surcharge to lists
-    all_names.append(name)
-    all_ticket_costs.append(ticket_cost)
-    all_surcharge.append(surcharge)
-
 mini_movie_frame = pandas.DataFrame(mini_movie_dict)
 # mini_movie_frame = mini_movie_frame.set_index('Name')
 
 # Calculate the total ticket cost (ticket + surcharge)
-mini_movie_frame['Total'] = mini_movie_frame['Surcharge'] \
+mini_movie_frame['Total'] = mini_movie_frame['Surcharge'] 
                             + mini_movie_frame['Ticket Price']
 
 # calculate the profit for each ticket
