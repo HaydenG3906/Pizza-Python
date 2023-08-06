@@ -1,6 +1,7 @@
 import pandas
 import random
 from datetime import date
+from datetime import datetime
 
 
 class bcolors:
@@ -389,69 +390,45 @@ if confirm == "no":
     if confirmation == "yes":
         print(bcolors.FAIL + "Order Was Deleted")
         exit()
-
-print('''
-mini_movie_frame = pandas.DataFrame(mini_movie_dict)
-# mini_movie_frame = mini_movie_frame.set_index('Name')
-
-# Calculate the total ticket cost (ticket + surcharge)
-mini_movie_frame['Total'] = mini_movie_frame['Surcharge'] 
-                            + mini_movie_frame['Ticket Price']
-
-# calculate the profit for each ticket
-mini_movie_frame['Profit'] = mini_movie_frame['Ticket Price'] - 5
+else:
+    print(bcolors.OKGREEN + "Order Success!" + bcolors.ENDC)
 
 
-# calculate ticket and profit totals
-total = mini_movie_frame['Total'].sum()
-profit = mini_movie_frame['Profit'].sum()
-
-# Currency Formatting (uses currency function)
-add_dollars = ['Ticket Price', 'Surcharge', 'Total', 'Profit']
-for var_item in add_dollars:
-    mini_movie_frame[var_item] = mini_movie_frame[var_item].apply(currency)
-
-# choose winner and look up total won
-winner_name = random.choice(all_names)
-win_index = all_names.index(winner_name)
-total_won = mini_movie_frame.at[win_index, 'Total']
+pizza_frame = pandas.DataFrame(mini_movie_dict)
+# pizza_frame = pizza_frame.set_index('Name')
 
 # set index at end (before printing)
-mini_movie_frame = mini_movie_frame.set_index('Name')
+pizza_frame = pizza_frame.set_index('Name')
 
 # **** Get current date for heading and filename ****
 # get today's date
 today = date.today()
+now = datetime.now()
 
 # Get day, month and year as individual strings
 day = today.strftime("%d")
 month = today.strftime("%m")
 year = today.strftime("%Y")
+current_time = now.strftime("%H/%M/%S")
 
-heading = "---- Mini Movie Fundraiser Ticket Data ({}/{}/{}) ----\n".format(day, month, year)
-filename = "MMF_{}_{}_{}".format(year, month, day)
+heading = "---- Pizza Receipt ({}/{}/{}) ----\n".format(day, month, year)
+filename = "Pizza_Receipt_{}".format(current_time)
 
 # Change frame to a string so that we can export it to file
-mini_movie_string = pandas.DataFrame.to_string(mini_movie_frame)
+pizza_string = pandas.DataFrame.to_string(pizza_frame)
 
 # create strings for printing....
 ticket_cost_heading = "\n---- Ticket Cost / Profit ----"
-total_ticket_sales = "Total Ticket Sales: ${:.2f}".format(total)
-total_profit = "Total Profit : ${:.2f}".format(profit)
+total_ticket_sales = "Total Ticket Sales: ${:.2f}".format(cost)
 
 # edit text below!! It needs to work if we have unsold tickets
 sales_status = "\n*** All the tickets have been sold ***"
 
-winner_heading = "\n---- Raffle Winner ----"
-winner_text = "The winner of the raffle is {}. " \
-              "They have won ${}. ie: Their Ticket is " \
-              "free!".format(winner_name, total_won)
+
 
 # list holding content to print / write to file
 
-to_write = [heading, mini_movie_string, ticket_cost_heading,
-            total_ticket_sales, total_profit, sales_status,
-            winner_heading, winner_text]
+to_write = [heading, pizza_string]
 
 # write output to file
 # create file to hold data (add .txt extension)
@@ -463,19 +440,17 @@ for item in to_write:
     text_file.write("\n")
 
 # close file
-text_file.close()
+#text_file.close()
 
 
 print(heading)
 print()
 
 # output table with ticket data
-print(mini_movie_frame)
+print(pizza_frame)
 
 print()
 print("----- Ticket Cost / Profit -----")
 
 # output total ticket sales and profit
 print("Total Ticket Sales: ${:.2f}".format(total))
-print("Total ticket profit ${:.2f}".format(profit))
-''')
