@@ -409,7 +409,7 @@ now = datetime.now()
 day = today.strftime("%d")
 month = today.strftime("%m")
 year = today.strftime("%Y")
-current_time = now.strftime("%H/%M/%S")
+current_time = now.strftime("%H/%M")
 
 heading = "---- Pizza Receipt ({}/{}/{}) ----\n".format(day, month, year)
 filename = "Pizza_Receipt_{}".format(current_time)
@@ -433,14 +433,14 @@ to_write = [heading, pizza_string]
 # write output to file
 # create file to hold data (add .txt extension)
 write_to = "{}.txt".format(filename)
-text_file = open(write_to, "w+")
-
-for item in to_write:
-    text_file.write(item)
-    text_file.write("\n")
-
-# close file
-#text_file.close()
+# text_file = open(write_to, "w+")
+#
+# for item in to_write:
+#     text_file.write(item)
+#     text_file.write("\n")
+#
+# # close file
+# text_file.close()
 
 
 print(heading)
@@ -450,7 +450,11 @@ print()
 print(pizza_frame)
 
 print()
-print("----- Ticket Cost / Profit -----")
+print("----- Pizzas -----")
+print()
+# Iterate through the selected pizza types and print them with their corresponding index
+for index, pizza_type in enumerate(pizza_types_name, start=1):
+    print("{}. {}".format(index, pizza_type))
+print()
+print("Total: ${}".format(cost))
 
-# output total ticket sales and profit
-print("Total Ticket Sales: ${:.2f}".format(total))
