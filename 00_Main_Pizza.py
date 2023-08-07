@@ -17,6 +17,7 @@ class bcolors:
 
 
 # set variables
+run = "null"
 cost = 0
 addmodification = 100
 selectedpizza = 0
@@ -42,9 +43,6 @@ cash_cred_list = ["cash", "credit"]
 # Lists to hold ticket details
 pizza_types_name = []
 pizza_types = []
-all_names = []
-all_ticket_costs = []
-all_surcharge = []
 stuffed_crust = [0, 0, 0, 0, 0]
 
 
@@ -52,6 +50,16 @@ stuffed_crust = [0, 0, 0, 0, 0]
 
 
 # shows instructions
+def debug():
+    while True:
+        run = not_blank("Enter a variable to view value or 'xxx' to end: ")
+        printer = "print({})".format(run)
+        if run == "xxx":
+            break
+        exec(printer)
+
+
+
 def show_instructions():
     print('''\n
     ***** Instructions *****
@@ -101,21 +109,6 @@ def num_check(question):
         except ValueError:
             print("Please enter an integer")
 
-
-# Calculate the ticket price based on the age
-# def calc_ticket_price(var_age):
-    # ticket is $7.50 for users under 16
-  #  if var_age < 16:
-   #     price = 7.5
-    # ticket is $10.50 for users between 16 and 64
-    #elif var_age <= 64:
-     #   price = 10.5
-    # ticket price is $6.50 for seniors (65+)
-    #else:
-    #    price = 6.5
-    #return price
-
-
 # checks that user enters a valid response based on a list of options
 def string_checker(question, num_letters, valid_responses):
 
@@ -138,14 +131,6 @@ def currency(x):
 
 
 # main routine starts here
-
-
-# Dictionary used to create data frame ie: column_name:list
-mini_movie_dict = {
-    "Name": all_names,
-    "Ticket Price": all_ticket_costs,
-    "Surcharge": all_surcharge
-}
 
 # Ask the user if they want to see the instructions
 
@@ -180,16 +165,11 @@ while pizza_ordered < pizza_wanted:
     else:
         pizza_ordered = pizza_ordered + 1 # add 1 too pizza ordered
         order_print_message = "Please Enter The Pizza wanted. Num of Pizza Ordered {}: ".format(pizza_ordered)
-        if pizza_inputed == 1:
-            pizza_num_cheese = pizza_num_cheese + 1
-        elif pizza_inputed == 2:
-            pizza_num_pepperoni = pizza_num_pepperoni + 1
-        elif pizza_inputed == 3:
-            pizza_num_hamcheese = pizza_num_hamcheese + 1
-        elif pizza_inputed == 4:
-            pizza_num_hawaiian = pizza_num_hawaiian + 1
-        elif pizza_inputed == 5:
-            pizza_num_vegan = pizza_num_vegan + 1
+        if pizza_inputed == 1: pizza_num_cheese = pizza_num_cheese + 1
+        elif pizza_inputed == 2: pizza_num_pepperoni = pizza_num_pepperoni + 1
+        elif pizza_inputed == 3: pizza_num_hamcheese = pizza_num_hamcheese + 1
+        elif pizza_inputed == 4: pizza_num_hawaiian = pizza_num_hawaiian + 1
+        elif pizza_inputed == 5: pizza_num_vegan = pizza_num_vegan + 1
         pizza_types.append(pizza_inputed)  # put the pizza in the list
 
         if pizza_inputed == 1:
@@ -393,8 +373,12 @@ if confirm == "no":
 else:
     print(bcolors.OKGREEN + "Order Success!" + bcolors.ENDC)
 
+pizza_dict = {
+    "Name": name,
+    "address": addressnum + addressstreet
+}
 
-pizza_frame = pandas.DataFrame(mini_movie_dict)
+pizza_frame = pandas.DataFrame(pizza_dict)
 # pizza_frame = pizza_frame.set_index('Name')
 
 # set index at end (before printing)
@@ -409,7 +393,7 @@ now = datetime.now()
 day = today.strftime("%d")
 month = today.strftime("%m")
 year = today.strftime("%Y")
-current_time = now.strftime("%H/%M")
+current_time = now.strftime("%H%M")
 
 heading = "---- Pizza Receipt ({}/{}/{}) ----\n".format(day, month, year)
 filename = "Pizza_Receipt_{}".format(current_time)
@@ -433,14 +417,14 @@ to_write = [heading, pizza_string]
 # write output to file
 # create file to hold data (add .txt extension)
 write_to = "{}.txt".format(filename)
-# text_file = open(write_to, "w+")
+text_file = open(write_to, "w+")
 #
-# for item in to_write:
-#     text_file.write(item)
-#     text_file.write("\n")
-#
-# # close file
-# text_file.close()
+for item in to_write:
+    text_file.write(item)
+    text_file.write("\n")
+
+# close file
+text_file.close()
 
 
 print(heading)
@@ -458,3 +442,4 @@ for index, pizza_type in enumerate(pizza_types_name, start=1):
 print()
 print("Total: ${}".format(cost))
 
+debug()
