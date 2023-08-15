@@ -17,6 +17,7 @@ class bcolors:
 
 
 # set variables
+addressfull = ""
 run = "null"
 cost = 0
 addmodification = 100
@@ -30,8 +31,6 @@ pizza_num_pepperoni = 0
 pizza_num_hamcheese = 0
 pizza_num_hawaiian = 0
 pizza_num_vegan = 0
-MAX_TICKETS = 5
-tickets_sold = 0
 pizza_ordered = 0
 order_print_message = "Please Enter The Pizza wanted. Num of Pizza Ordered {}: ".format(pizza_ordered)
 
@@ -39,37 +38,39 @@ yes_no_list = ["yes", "no"]
 payment_list = ["cash", "credit"]
 delivery_list = ["pickup", "delivery"]
 cash_cred_list = ["cash", "credit"]
+pizza_list = ["cheese", "pepperoni", "ham & cheese", "hawaiian", "vegan"]
+modification_list = ["meat", "cheese", "sauce", "stuffed crust"]
+
 
 # Lists to hold ticket details
+
+price_list = [4, 5, 5, 5, 6]
+realtimeprice_list = [0]
+selected_pizza_num_list = [0, 1, 2, 3, 4, 5]
 pizza_types_name = []
 pizza_types = []
 stuffed_crust = [0, 0, 0, 0, 0]
+pizza_nums = [0, 0, 0, 0, 0]
+
+# Panda Variables
 
 
 # functions go here
 
 
 # shows instructions
-def debug():
-    while True:
-        run = not_blank("Enter a variable to view value or 'xxx' to end: ")
-        printer = "print({})".format(run)
-        if run == "xxx":
-            break
-        exec(printer)
-
 
 
 def show_instructions():
     print('''\n
     ***** Instructions *****
-    
+
 Ordering Pizza:
-    
+
     - Enter Amount of Pizza wanted
     - Select Wanted Pizza
     - Select Other Items
-    
+
 Delivery and Details
 
     - Select Delivery or Pick Up In Store
@@ -77,10 +78,10 @@ Delivery and Details
     - Name
     - Address (If Delivery)
     - Phone Number
-    
+
 Select If paying now with credit or cash (only if pickup) in store
 
-Enter Payment Details if paying with credits (For the assessment instead of entering a real card
+Enter Payment Details if paying wi-th credits (For the assessment instead of entering a real card
 enter a 4 digit number as an example for a card)
 
 Your receipt should print in a text file
@@ -109,9 +110,9 @@ def num_check(question):
         except ValueError:
             print("Please enter an integer")
 
+
 # checks that user enters a valid response based on a list of options
 def string_checker(question, num_letters, valid_responses):
-
     error = "Please choose {} or {}".format(valid_responses[0],
                                             valid_responses[1])
 
@@ -163,37 +164,17 @@ while pizza_ordered < pizza_wanted:
     if pizza_inputed > 5 or pizza_inputed < 1:
         order_print_message = bcolors.FAIL + "Please enter a number 1-5: " + bcolors.ENDC
     else:
-        pizza_ordered = pizza_ordered + 1 # add 1 too pizza ordered
+        pizza_ordered = pizza_ordered + 1  # add 1 too pizza ordered
         order_print_message = "Please Enter The Pizza wanted. Num of Pizza Ordered {}: ".format(pizza_ordered)
-        if pizza_inputed == 1: pizza_num_cheese = pizza_num_cheese + 1
-        elif pizza_inputed == 2: pizza_num_pepperoni = pizza_num_pepperoni + 1
-        elif pizza_inputed == 3: pizza_num_hamcheese = pizza_num_hamcheese + 1
-        elif pizza_inputed == 4: pizza_num_hawaiian = pizza_num_hawaiian + 1
-        elif pizza_inputed == 5: pizza_num_vegan = pizza_num_vegan + 1
-        pizza_types.append(pizza_inputed)  # put the pizza in the list
+        # pizza_nums[pizza_inputed - 1] = pizza_nums[pizza_inputed - 1] + 1
+        # pizza_types.append(pizza_inputed)  # put the pizza in the list
 
-        if pizza_inputed == 1:
-            pizza_name = "Cheese"
-            pizza_types_name.append(pizza_name)
-        elif pizza_inputed == 2:
-            pizza_name = "Pepperoni"
-            pizza_types_name.append(pizza_name)
-        elif pizza_inputed == 3:
-            pizza_name = "Ham & cheese"
-            pizza_types_name.append(pizza_name)
-        elif pizza_inputed == 4:
-            pizza_name = "Hawaiian"
-            pizza_types_name.append(pizza_name)
-        elif pizza_inputed == 5:
-            pizza_name = "Vegan"
-            pizza_types_name.append(pizza_name)
-        continue
+        pizza_types_name.append(pizza_list[pizza_inputed - 1])
 
 
 print('''
 ******************************************************
 ''')
-
 
 # Create a list of tuples containing pizza types and quantities
 pizza_quantities = [
@@ -205,7 +186,8 @@ pizza_quantities = [
 ]
 
 # Create a list to hold the formatted strings for each pizza type and quantity
-formatted_pizzas = ["{}x {}".format(quantity, pizza_types_name) for pizza_types_name, quantity in pizza_quantities if quantity > 0]
+formatted_pizzas = ["{}x {}".format(quantity, pizza_types_name) for pizza_types_name, quantity in pizza_quantities if
+                    quantity > 0]
 
 # Use the join method to create the final formatted string
 pizza_order_string = ", ".join(formatted_pizzas)
@@ -217,17 +199,6 @@ print('''
 ******************************************************
 ''')
 
-
-if pizza_wanted >= 1:
-    formatmod = pizza_types_name[0]
-if pizza_wanted >= 2:
-    formatmod = formatmod + ", " + pizza_types_name[1]
-if pizza_wanted >= 3:
-    formatmod = formatmod + ", " + pizza_types_name[2]
-if pizza_wanted >= 4:
-    formatmod = formatmod + ", " + pizza_types_name[3]
-if pizza_wanted >= 5:
-    formatmod = formatmod + ", " + pizza_types_name[4]
 
 while selectpizza != "0":
     pizzamodificaton = string_checker("Would you like to modify a pizza? ", 1, yes_no_list)
@@ -241,25 +212,17 @@ while selectpizza != "0":
         for index, pizza_type in enumerate(pizza_types_name, start=1):
             print("{}. {}".format(index, pizza_type))
 
-
         selectpizzanum = num_check("Select a Pizza to modify or '0' to stop modifying: ")
 
-        addmodification = 50 # reset
+        addmodification = 50  # reset
 
         if selectpizzanum > pizza_wanted:
             print("Please select a valid Number")
-        elif selectpizzanum == 1:
-            selectedpizza = pizza_types_name[0]
-        elif selectpizzanum == 2:
-            selectedpizza = pizza_types_name[1]
-        elif selectpizzanum == 3:
-            selectedpizza = pizza_types_name[2]
-        elif selectpizzanum == 4:
-            selectedpizza = pizza_types_name[3]
-        elif selectpizzanum == 5:
-            selectedpizza = pizza_types_name[4]
-        elif selectpizzanum == 0:
+
+        if selectpizzanum == 0:
             break
+        else:
+            selectedpizza = pizza_types_name[selectpizzanum - 1]
 
         while addmodification != 0:
             print("")
@@ -304,8 +267,8 @@ cost = cost + pizza_num_cheese * 4 + pizza_num_pepperoni * 5 + pizza_num_hamchee
 
 print("current cost: ${}".format(cost))
 delivery_method = string_checker("Choose a delivery method Pickup / "
-                            "Delivery (+$10): ",
-                            1, delivery_list)
+                                 "Delivery (+$10): ",
+                                 1, delivery_list)
 
 if delivery_method == "delivery":
     cashorcred = "credit"
@@ -317,7 +280,6 @@ else:
     cashorcred = string_checker("Are you paying with cash or credit: ", 2, cash_cred_list)
     if cashorcred == "credit":
         cardnum = 0
-
 
 name = not_blank("Please enter your name: ")
 while True:
@@ -356,6 +318,7 @@ for index, pizza_type in enumerate(pizza_types_name, start=1):
 print()
 if delivery_method == "delivery":
     print("Deliver to {} {}".format(addressnum, addressstreet))
+    print("Deliver to {} {}".format(addressnum, addressstreet))
 else:
     print("Pickup In store")
 print()
@@ -373,13 +336,17 @@ if confirm == "no":
 else:
     print(bcolors.OKGREEN + "Order Success!" + bcolors.ENDC)
 
+if delivery_method == "delivery":
+    addressfull = "{} {}".format(addressnum, addressstreet)
+
 pizza_dict = {
     "Name": name,
-    "address": addressnum + addressstreet
+    "address": addressfull,
+    "Phone Num": phonenum
 }
 
 pizza_frame = pandas.DataFrame(pizza_dict)
-# pizza_frame = pizza_frame.set_index('Name')
+pizza_frame = pizza_frame.set_index('Name')
 
 # set index at end (before printing)
 pizza_frame = pizza_frame.set_index('Name')
@@ -408,14 +375,13 @@ total_ticket_sales = "Total Ticket Sales: ${:.2f}".format(cost)
 # edit text below!! It needs to work if we have unsold tickets
 sales_status = "\n*** All the tickets have been sold ***"
 
-
-
 # list holding content to print / write to file
 
 to_write = [heading, pizza_string]
 
 # write output to file
 # create file to hold data (add .txt extension)
+
 write_to = "{}.txt".format(filename)
 text_file = open(write_to, "w+")
 #
@@ -425,7 +391,6 @@ for item in to_write:
 
 # close file
 text_file.close()
-
 
 print(heading)
 print()
@@ -442,4 +407,4 @@ for index, pizza_type in enumerate(pizza_types_name, start=1):
 print()
 print("Total: ${}".format(cost))
 
-debug()
+
