@@ -176,6 +176,30 @@ print('''
 ******************************************************
 ''')
 
+# Create a list of tuples containing pizza types and quantities
+pizza_quantities = [
+    ("Cheese", pizza_num_cheese),
+    ("Pepperoni", pizza_num_pepperoni),
+    ("Ham and Cheese", pizza_num_hamcheese),
+    ("Hawaiian", pizza_num_hawaiian),
+    ("Vegan", pizza_num_vegan)
+]
+
+# Create a list to hold the formatted strings for each pizza type and quantity
+formatted_pizzas = ["{}x {}".format(quantity, pizza_types_name) for pizza_types_name, quantity in pizza_quantities if
+                    quantity > 0]
+
+# Use the join method to create the final formatted string
+pizza_order_string = ", ".join(formatted_pizzas)
+
+# Print the pizza order string
+print("Pizza Ordered: " + pizza_order_string)
+
+print('''
+******************************************************
+''')
+
+
 while selectpizza != "0":
     pizzamodificaton = string_checker("Would you like to modify a pizza? ", 1, yes_no_list)
     while pizzamodificaton == "yes":
@@ -211,22 +235,22 @@ Options:
 4. Stuffed Crust       $3''')
             addmodification = num_check("Select What to add to Pizza or '0' to end: ")
 
-            if addmodification == range(1-5):
-                selectedpizza = selectedpizza + "+ {}".format(modification_list-1)
-
-         #   elif addmodification == 4:
-         #       if stuffed_crust[selectpizzanum - 1] == 0:
-         #           selectedpizza = selectedpizza + " + Stuffed Crust"
-         #           cost = cost + 3
-         #           pizza_types_name[selectpizzanum - 1] = selectedpizza
-         #           stuffed_crust[selectpizzanum - 1] = 1
-         #       else:
-         #           print(bcolors.FAIL + "stuffed crust can only be added once" + bcolors.ENDC)
-         #   elif addmodification == 0:
-         #       selectpizza = "0"
-         #       break
-         #   else:
-         #       print(bcolors.FAIL + "Enter a valid modification" + bcolors.ENDC)
+            if addmodification in range(1, 4):
+                selectedpizza = selectedpizza + " + {}".format(modification_list[addmodification - 1])
+            #else:
+            elif addmodification == 4:
+                if stuffed_crust[selectpizzanum - 1] == 0:
+                    selectedpizza = selectedpizza + " + Stuffed Crust"
+                    cost = cost + 3
+                    pizza_types_name[selectpizzanum - 1] = selectedpizza
+                    stuffed_crust[selectpizzanum - 1] = 1
+                else:
+                    print(bcolors.FAIL + "stuffed crust can only be added once" + bcolors.ENDC)
+            elif addmodification == 0:
+                selectpizza = "0"
+                break
+            else:
+                print(bcolors.FAIL + "Enter a valid modification" + bcolors.ENDC)
 
     else:
         break
